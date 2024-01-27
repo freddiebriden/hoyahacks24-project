@@ -1,0 +1,51 @@
+.make-round{
+    border-radius: 30px;
+    width: 40%;
+    height: 300px;
+    background-color: white;
+    margin: 20px;
+    display: inline-block;
+}
+
+.investor-card{
+    background-color: white;
+    width: 90%;
+    height: 97%;
+    margin: auto;
+    overflow-y:auto;
+    overflow-x: hidden;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.investor-name{
+    margin: 0px;
+    color: black;
+    margin-bottom: 15px;
+}
+
+.subtitle{
+    text-align: left;
+    color: black;
+    margin: 0px;
+}
+
+.long-description{
+    text-align: left;
+    color: black;
+    margin: 0px;
+    margin-bottom: 15px;
+}
+
+.subtext{
+    margin: 5px;
+    font-weight: normal;
+    float: left;
+    text-align: left;
+    color: black;
+    display: inline;
+}
+
+.email{
+    padding-right: 200px;
+}

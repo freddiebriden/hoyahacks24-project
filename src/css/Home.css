@@ -4,6 +4,12 @@
 
 .main-title{
     font-size: 128px;
+    margin-bottom: 0px;
+}
+
+.description{
+    margin-top: 0px;
+    margin-bottom: 40px;
 }
 
 .link-button{

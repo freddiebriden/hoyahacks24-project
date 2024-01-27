@@ -77,6 +77,7 @@ export default function BusinessForm() {
                 type="text"
                 name="subIndustry"
                 className="short-text-input"
+                placeholder="ex: yoga studio, fast food, etc."
               />
             </div>
           </div>
@@ -88,7 +89,7 @@ export default function BusinessForm() {
             type="text"
             className="chunk-text-input"
             value={formData.description}
-            placeholder="Descibe your business here... What do you do? What is your niche/speciality? What is your vision?"
+            placeholder="Descibe your business here... What do you do? What more can you tell us about your niche/speciality? What is your vision?"
             name="description"
             onChange={handleChange}
           />

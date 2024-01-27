@@ -6,7 +6,7 @@ export default function InvestorForm() {
   const Navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    description: "Descibe your business here...",
+    description: "",
   });
 
   const handleChange = (event) => {
@@ -16,7 +16,7 @@ export default function InvestorForm() {
   };
 
   const submitForm = () => {
-    Navigate("/business");
+    Navigate("/investor");
   };
 
   return (
@@ -27,14 +27,14 @@ export default function InvestorForm() {
         </a>
       </div>
       <div className="form-wrapper">
-        <h2 className="subheading">Business Details</h2>
+        <h2 className="subheading">Investor Details</h2>
 
         <div className="line-wrapper">
-          <label>Business Name</label>
+          <label>Investor Name</label>
           <input
             type="text"
             className="long-text-input"
-            name="businessName"
+            name="name"
             onChange={handleChange}
           />
         </div>
@@ -73,11 +73,12 @@ export default function InvestorForm() {
         </div>
 
         <div className="line-wrapper">
-          <label>Business Description</label>
+          <label>Describe Yourself!</label>
           <textarea
             type="text"
             className="chunk-text-input"
             value={formData.description}
+            placeholder="Descibe yourself here..."
             name="description"
             onChange={handleChange}
           />

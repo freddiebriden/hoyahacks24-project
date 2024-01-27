@@ -1,0 +1,71 @@
+.header{
+    text-decoration: none;
+    font-size: 60px;
+    font-weight: bold;
+    margin: none;
+    color:white;
+}
+
+.display-wrapper{
+    width: 65%;
+    background: black;
+    opacity: .6;
+    margin: auto;
+    border-radius: 30px;
+    height: fit-content;
+    padding-bottom: 20px;
+    display: inline-block;
+}
+
+.business-wrapper{
+    width: 80%;
+    background: white;
+    opacity: 1;
+    border-radius: 30px;
+    margin: auto;
+    color: black;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.business-name{
+    color: black;
+    font-size: 40px;
+    margin: 10px;
+}
+
+.feature-label{
+    color: black;
+    margin: 5px;
+    display: inline-block;
+}
+
+.feature{
+    color: black;
+    margin: 5px;
+    display: inline-block;
+}
+
+.choice-button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: white;
+    margin: 10px;
+}
+
+.icon-img{
+    width: 100%;
+    height: auto;
+    border-radius: 50px;
+}
+
+.no-button{
+    float:left;
+    margin-left: 60px;
+}
+
+.yes-button{
+    float:right;
+    margin-right: 60px;
+}

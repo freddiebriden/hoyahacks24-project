@@ -6,7 +6,7 @@ export default function BusinessForm() {
   const Navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    description: "Descibe your business here...",
+    description: "",
   });
 
   const handleChange = (event) => {
@@ -34,7 +34,7 @@ export default function BusinessForm() {
           <input
             type="text"
             className="long-text-input"
-            name="businessName"
+            name="name"
             onChange={handleChange}
           />
         </div>
@@ -57,18 +57,28 @@ export default function BusinessForm() {
             </select>
           </div>
 
-          <label>Funding Stage hold [ctrl] to select multiple</label>
-          <div className="select-wrapper">
-            <select
-              className="short-text-input"
-              multiple
-              name="fundingStage"
-              onChange={handleChange}
-            >
-              <option value="seed">Idea/Seed</option>
-              <option value="scale">Scaling</option>
-              <option value="expand">Expansion</option>
-            </select>
+          <div className="double-stack">
+            <div className="stack-elem">
+              <label>Funding Stage</label>
+              <select
+                className="short-text-input single-select"
+                name="fundingStage"
+                onChange={handleChange}
+              >
+                <option value="seed">Idea/Seed</option>
+                <option value="scale">Scaling</option>
+                <option value="expand">Expansion</option>
+              </select>
+            </div>
+
+            <div className="stack-elem">
+              <label>Sub-Industry</label>
+              <input
+                type="text"
+                name="subIndustry"
+                className="short-text-input"
+              />
+            </div>
           </div>
         </div>
 
@@ -78,6 +88,7 @@ export default function BusinessForm() {
             type="text"
             className="chunk-text-input"
             value={formData.description}
+            placeholder="Descibe your business here... What do you do? What is your niche/speciality? What is your vision?"
             name="description"
             onChange={handleChange}
           />

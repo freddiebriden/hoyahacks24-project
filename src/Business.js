@@ -1,48 +1,29 @@
 import { React, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import InvestorDisplay from "./components/InvestorDisplay";
 import "./css/business.css";
 
 export default function Business() {
   const [investors, setInvestors] = useState([]);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     // get investors from api
     // loading dummy data
-    setInvestors([
-      {
-        name: "business 1",
-        description:
-          "kasdjvj j j j j h h g idads fas dfsd fsd fssd fsdf sdf sdf sd fdsf sdf sdad v hahj lf lhk  hl sfa  dsf asdf as fasd fas fasfs fas fsdfda hl kjf sda sdfsa asdfsd f asdf asfdasdf asf a  hlkj fh kjlf ah kjlfsda ",
-        firstName: "FName",
-        lastName: "LName",
-        email: "123@abc.com",
-      },
-      {
-        name: "business 2",
-        description:
-          "kasdjvj j j j j h h gidadvhahj lf lhk  hl sfda hlkjfsda  hlkj fh kjlf ah kjlfsda ",
-        firstName: "FName",
-        lastName: "LName",
-        email: "123@abc.com",
-      },
-      {
-        name: "business 3",
-        description:
-          "kasdjvj j j j j h h gidadvhahj lf lhk  hl sfda hlkjfsda  hlkj fh kjlf ah kjlfsda ",
-        firstName: "FName",
-        lastName: "LName",
-        email: "123@abc.com",
-      },
-      {
-        name: "business 4",
-        description:
-          "kasdjvj j j j j h h gidadvhahj lf lhk  hl sfda hlkjfsda  hlkj fh kjlf ah kjlfsda ",
-        firstName: "FName",
-        lastName: "LName",
-        email: "123@abc.com",
-      },
-    ]);
-  });
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currId: searchParams.get("id") }),
+    };
+    console.log(requestOptions.body);
+    fetch("http://127.0.0.1:8000/getinvestors/", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("got request back");
+        console.log(data);
+        setInvestors(data.investors);
+      });
+  }, []);
 
   return (
     <>

@@ -39,7 +39,10 @@ export default function BusinessForm() {
     };
     fetch("http://127.0.0.1:8000/addbusiness/", requestOptions)
       .then((response) => response.json())
-      .then(Navigate("/business"));
+      .then((data) => {
+        console.log(data);
+        Navigate({ pathname: "/business", search: "?id=" + data });
+      });
   };
 
   return (

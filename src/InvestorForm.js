@@ -39,7 +39,10 @@ export default function InvestorForm() {
     };
     fetch("http://127.0.0.1:8000/addinvestor/", requestOptions)
       .then((response) => response.json())
-      .then(Navigate("/business"));
+      .then((data) => {
+        console.log(data);
+        Navigate({ pathname: "/investor", search: "?id=" + data });
+      });
   };
 
   return (

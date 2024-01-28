@@ -1,31 +1,56 @@
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.6;
+     }
+}
+
+@keyframes fadeInAnimationOpaque {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
+}
+
 .header{
     text-decoration: none;
     font-size: 60px;
     font-weight: bold;
     margin: none;
-    color:white;
+    color:#4D657C;
+    animation: fadeInAnimationOpaque ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 .display-wrapper{
-    width: 65%;
+    width: 55%;
     background: black;
     opacity: .6;
     margin: auto;
-    border-radius: 30px;
+    border-radius: 5px;
     height: fit-content;
     padding-bottom: 20px;
     display: inline-block;
+    animation: fadeInAnimation ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 .business-wrapper{
-    width: 80%;
+    width: 90%;
     background: white;
     opacity: 1;
-    border-radius: 30px;
+    border-radius: 5px;
     margin: auto;
     color: black;
     overflow: hidden;
-    margin-top: 20px;
+    margin-top: 29px;
+    margin-bottom: 13px;
 }
 
 .business-name{
@@ -50,14 +75,16 @@
     width: 50px;
     height: 50px;
     border-radius: 50px;
-    background-color: white;
+    background-color: transparent;
     margin: 10px;
+    z-index: 3;
 }
 
 .icon-img{
     width: 100%;
     height: auto;
     border-radius: 50px;
+    z-index:1;
 }
 
 .no-button{

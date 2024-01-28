@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Annotated, Optional, List
+from typing import Annotated, Optional
 from pydantic.functional_validators import BeforeValidator
 from pydantic import BaseModel, Field
 from enum import Enum
 from bson import ObjectId
+from mongostr import mongostr
 
 import motor.motor_asyncio as motor
 
@@ -40,27 +41,38 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 class BusinessModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     name: str = Field(...)
-    industry: List[Industry] = Field(...)
+    industry: list[Industry] = Field(...)
     subindustry: str = Field(...)
     funding: Funding = Field(...)
     description: str = Field(...)
     firstName: str = Field(...)
     lastName: str = Field(...)
     email: str = Field(...)
-    liked: List[PyObjectId] = []
+    liked: list[PyObjectId] = []
 
 class InvestorModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     name: str = Field(...)
-    industry: List[Industry] = Field(...)
-    funding: List[Funding] = Field(...)
+    industry: list[Industry] = Field(...)
+    funding: list[Funding] = Field(...)
     description: str = Field(...)
     firstName: str = Field(...)
     lastName: str = Field(...)
     email: str = Field(...)
-    seen: List[PyObjectId] = []
+    seen: list[PyObjectId] = []
 
-client = motor.AsyncIOMotorClient('mongodb+srv://freddiebriden:rPf3IfAprDkH1h3m@cluster0.jw0jeya.mongodb.net/?retryWrites=true&w=majority')
+class LikeModel(BaseModel):
+    target: PyObjectId = Field(...)
+    current: PyObjectId = Field(...)
+    liked: bool = Field(...)
+
+class IdModel(BaseModel):
+    currId: PyObjectId = Field(...)
+
+class InvestorModelList(BaseModel):
+    investors: list[InvestorModel] = Field(...)
+
+client = motor.AsyncIOMotorClient(mongostr.key)
 db = client.get_database("users")
 business_collection = db.get_collection("businesses")
 investor_collection = db.get_collection("investors")
@@ -97,11 +109,29 @@ async def add_investor(investor: InvestorModel):
     return str(new_investor.inserted_id)
 
 @app.post("/likebusiness/")
-async def like_business(target: str, current: str, liked: bool):
-    if liked:
-        result = await business_collection.update_one({"_id": ObjectId(target)}, {"$push": {"liked": ObjectId(current)}})
-    result2 = await investor_collection.update_one({"_id": ObjectId(current)}, {"$push": {"seen": ObjectId(target)}})
+async def like_business(liked: LikeModel):
+    if liked.liked:
+        result = await business_collection.update_one({"_id": ObjectId(liked.target)}, {"$push": {"liked": ObjectId(liked.current)}})
+    result2 = await investor_collection.update_one({"_id": ObjectId(liked.current)}, {"$push": {"seen": ObjectId(liked.target)}})
     return "nya"
+
+@app.post(
+    "/recommend/",
+    response_model=BusinessModel
+)
+async def recommend(current: IdModel):
+    investor = await investor_collection.find_one({"_id": ObjectId(current.currId)})
+    business = await business_collection.find_one({"industry": {"$in": investor["industry"]}, "funding": {"$in": investor["funding"]}, "_id": {"$nin": investor["seen"]}})
+    return business
+
+@app.post(
+    "/getinvestors/",
+    response_model=InvestorModelList
+)
+async def get_investors(current: IdModel):
+    business = await business_collection.find_one({"_id": ObjectId(current.currId)})
+    output = [x async for x in investor_collection.find({"_id": {"$in": business["liked"]}})]
+    return {"investors": output}
 
 @app.get("/business/{name}")
 async def get_business(name: str):

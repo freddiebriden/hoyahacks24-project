@@ -15,8 +15,31 @@ export default function InvestorForm() {
     setFormData((values) => ({ ...values, [name]: value }));
   };
 
+  const handleListChange = (event) => {
+    var options = event.target.options;
+    var value = [];
+    for (var i = 0, l = options.length; i < l; i++) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    var name = event.target.name;
+    setFormData((values) => ({ ...values, [name]: value }));
+  };
+
   const submitForm = () => {
-    Navigate("/investor");
+    var toJson = formData;
+    console.log(toJson);
+    var jsonOut = JSON.stringify(toJson);
+    console.log(jsonOut);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonOut,
+    };
+    fetch("http://127.0.0.1:8000/addinvestor/", requestOptions)
+      .then((response) => response.json())
+      .then(Navigate("/business"));
   };
 
   return (
@@ -46,7 +69,7 @@ export default function InvestorForm() {
               className="short-text-input"
               multiple
               name="industry"
-              onChange={handleChange}
+              onChange={handleListChange}
             >
               <option value="food">Restaurant and Food</option>
               <option value="retail">Retail</option>
@@ -62,8 +85,8 @@ export default function InvestorForm() {
             <select
               className="short-text-input"
               multiple
-              name="fundingStage"
-              onChange={handleChange}
+              name="funding"
+              onChange={handleListChange}
             >
               <option value="seed">Idea/Seed</option>
               <option value="scale">Scaling</option>

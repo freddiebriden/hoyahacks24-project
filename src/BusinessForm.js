@@ -15,8 +15,31 @@ export default function BusinessForm() {
     setFormData((values) => ({ ...values, [name]: value }));
   };
 
+  const handleListChange = (event) => {
+    var options = event.target.options;
+    var value = [];
+    for (var i = 0, l = options.length; i < l; i++) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    var name = event.target.name;
+    setFormData((values) => ({ ...values, [name]: value }));
+  };
+
   const submitForm = () => {
-    Navigate("/business");
+    var toJson = formData;
+    console.log(toJson);
+    var jsonOut = JSON.stringify(toJson);
+    console.log(jsonOut);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonOut,
+    };
+    fetch("http://127.0.0.1:8000/addbusiness/", requestOptions)
+      .then((response) => response.json())
+      .then(Navigate("/business"));
   };
 
   return (
@@ -46,7 +69,7 @@ export default function BusinessForm() {
               className="short-text-input"
               multiple
               name="industry"
-              onChange={handleChange}
+              onChange={handleListChange}
             >
               <option value="food">Restaurant and Food</option>
               <option value="retail">Retail</option>
@@ -62,7 +85,7 @@ export default function BusinessForm() {
               <label>Funding Stage</label>
               <select
                 className="short-text-input single-select"
-                name="fundingStage"
+                name="funding"
                 onChange={handleChange}
               >
                 <option value="seed">Idea/Seed</option>
@@ -75,9 +98,10 @@ export default function BusinessForm() {
               <label>Sub-Industry</label>
               <input
                 type="text"
-                name="subIndustry"
+                name="subindustry"
                 className="short-text-input"
                 placeholder="ex: yoga studio, fast food, etc."
+                onChange={handleChange}
               />
             </div>
           </div>

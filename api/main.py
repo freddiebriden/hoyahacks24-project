@@ -4,6 +4,7 @@ from typing import Annotated, Optional, List
 from pydantic.functional_validators import BeforeValidator
 from pydantic import BaseModel, Field
 from enum import Enum
+from bson import ObjectId
 
 import motor.motor_asyncio as motor
 
@@ -52,13 +53,13 @@ class InvestorModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     name: str = Field(...)
     industry: List[Industry] = Field(...)
-    funding: Funding = Field(...)
+    funding: List[Funding] = Field(...)
     description: str = Field(...)
     firstName: str = Field(...)
     lastName: str = Field(...)
     email: str = Field(...)
     seen: List[PyObjectId] = []
-'{"name": "temp", "industry": "food", "subindustry": "sushi", "funding": "seed", "description": "good food", "firstName": "me", "lastName": "me:3", "email": "email address"}'
+
 client = motor.AsyncIOMotorClient('mongodb+srv://freddiebriden:rPf3IfAprDkH1h3m@cluster0.jw0jeya.mongodb.net/?retryWrites=true&w=majority')
 db = client.get_database("users")
 business_collection = db.get_collection("businesses")
@@ -75,6 +76,7 @@ async def add_business(business: BusinessModel):
         business.model_dump(by_alias=True, exclude=["id"])
     )
     print(new_business.inserted_id)
+    print(type(new_business.inserted_id))
     created_business = await business_collection.find_one(
         {"_id": new_business.inserted_id}
     )
@@ -93,6 +95,13 @@ async def add_investor(investor: InvestorModel):
     )
     print(created_investor)
     return "bleh"
+
+@app.post("/likebusiness/")
+async def like_business(target: str, current: str, liked: bool):
+    if liked:
+        result = await business_collection.update_one({"_id": ObjectId(target)}, {"$push": {"liked": ObjectId(current)}})
+    result2 = await investor_collection.update_one({"_id": ObjectId(current)}, {"$push": {"seen": ObjectId(target)}})
+    return "nya"
 
 @app.get("/business/{name}")
 async def get_business(name: str):

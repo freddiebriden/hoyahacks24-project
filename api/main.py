@@ -81,7 +81,7 @@ async def add_business(business: BusinessModel):
         {"_id": new_business.inserted_id}
     )
     print(created_business)
-    return "bleh"
+    return str(new_business.inserted_id)
 
 @app.post("/addinvestor/")
 async def add_investor(investor: InvestorModel):
@@ -94,7 +94,7 @@ async def add_investor(investor: InvestorModel):
         {"_id": new_investor.inserted_id}
     )
     print(created_investor)
-    return "bleh"
+    return str(new_investor.inserted_id)
 
 @app.post("/likebusiness/")
 async def like_business(target: str, current: str, liked: bool):

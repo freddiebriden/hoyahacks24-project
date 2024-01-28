@@ -55,3 +55,18 @@
 .link-button:hover {
     box-shadow: inset 400px 0 0 0 #C3E2C2;
   }
+
+  .on-load{
+    animation: fadeInAnimationOpaque ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInAnimationOpaque {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
+}

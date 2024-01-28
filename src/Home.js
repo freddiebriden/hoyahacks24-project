@@ -3,11 +3,10 @@ import "./css/Home.css";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="main-title">Oyster</h1>
-      <h3 className="description">
-        Making small and micro businesses into pearls
-      </h3>
+    <div className="on-load">
+      <h1 href="/" className="main-title">
+        Oyster
+      </h1>
       <a className="link-button" href="/businessform">
         Business
       </a>

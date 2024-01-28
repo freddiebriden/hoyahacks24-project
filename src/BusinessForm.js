@@ -146,8 +146,15 @@ export default function BusinessForm() {
           <label>Email</label>
           <input
             type="text"
-            className="long-text-input"
+            className="short-text-input"
             name="email"
+            onChange={handleChange}
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            className="short-text-input"
+            name="password"
             onChange={handleChange}
           />
         </div>

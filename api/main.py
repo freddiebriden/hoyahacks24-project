@@ -80,7 +80,7 @@ class LoginInfoModel(BaseModel):
 
 class LoginOutModel(BaseModel):
     current: PyObjectId = Field(...)
-    business: bool = Field(...)
+    business_bool: bool = Field(...)
 
 client = motor.AsyncIOMotorClient(mongostr.key)
 db = client.get_database("users")
@@ -139,6 +139,8 @@ async def recommend(current: IdModel):
     response_model=InvestorModelList
 )
 async def get_investors(current: IdModel):
+    print(current)
+    print(current.currId)
     business = await business_collection.find_one({"_id": ObjectId(current.currId)})
     output = [x async for x in investor_collection.find({"_id": {"$in": business["liked"]}})]
     return {"investors": output}
@@ -151,6 +153,6 @@ async def login(current: LoginInfoModel):
     if (
         business := await business_collection.find_one({"email": current.email, "password": current.password})
     ) != None:
-        return {"current": business.id, business: True}
+        return {"current": business["_id"], "business_bool": True}
     investor = await investor_collection.find_one({"email": current.email, "password": current.password})
-    return {"current": investor.id, business:False}
+    return {"current": investor["_id"], "business_bool":False}

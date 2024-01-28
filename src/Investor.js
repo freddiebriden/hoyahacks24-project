@@ -14,6 +14,7 @@ export default function Investor() {
     lastName: "",
     email: "",
   });
+  const [error, setError] = useState(false);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -30,6 +31,9 @@ export default function Investor() {
         console.log("got request back");
         console.log(data);
         setBusiness(data);
+      })
+      .catch((error) => {
+        setError(true);
       });
   }, []);
 
@@ -46,6 +50,9 @@ export default function Investor() {
         console.log("got request back");
         console.log(data);
         setBusiness(data);
+      })
+      .catch((error) => {
+        setError(true);
       });
   };
 
@@ -68,7 +75,7 @@ export default function Investor() {
       });
   };
 
-  if (business == "error code") {
+  if (error) {
     return (
       <>
         <div>

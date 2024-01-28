@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated, Optional
 from pydantic.functional_validators import BeforeValidator
@@ -48,6 +48,7 @@ class BusinessModel(BaseModel):
     firstName: str = Field(...)
     lastName: str = Field(...)
     email: str = Field(...)
+    password: str = Field(...)
     liked: list[PyObjectId] = []
 
 class InvestorModel(BaseModel):
@@ -59,6 +60,7 @@ class InvestorModel(BaseModel):
     firstName: str = Field(...)
     lastName: str = Field(...)
     email: str = Field(...)
+    password: str = Field(...)
     seen: list[PyObjectId] = []
 
 class LikeModel(BaseModel):
@@ -71,6 +73,14 @@ class IdModel(BaseModel):
 
 class InvestorModelList(BaseModel):
     investors: list[InvestorModel] = Field(...)
+
+class LoginInfoModel(BaseModel):
+    email: str = Field(...)
+    password: str = Field(...)
+
+class LoginOutModel(BaseModel):
+    current: PyObjectId = Field(...)
+    business: bool = Field(...)
 
 client = motor.AsyncIOMotorClient(mongostr.key)
 db = client.get_database("users")
@@ -133,10 +143,14 @@ async def get_investors(current: IdModel):
     output = [x async for x in investor_collection.find({"_id": {"$in": business["liked"]}})]
     return {"investors": output}
 
-@app.get("/business/{name}")
-async def get_business(name: str):
+@app.post(
+    "/login/",
+    response_model=LoginOutModel
+)
+async def login(current: LoginInfoModel):
     if (
-        business := await business_collection.find_one({"name": name})
-    ) is not None:
-        print(business)
-    return "yeah"
+        business := await business_collection.find_one({"email": current.email, "password": current.password})
+    ) != None:
+        return {"current": business.id, business: True}
+    investor = await investor_collection.find_one({"email": current.email, "password": current.password})
+    return {"current": investor.id, business:False}
